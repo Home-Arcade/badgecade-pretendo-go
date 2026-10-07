@@ -35,8 +35,7 @@ func respondToLogin(err error, client *nex.Client, callID uint32, username strin
 		}
 		userPID = uint32(parsedPID)
 
-		// A signed proxy token means the console holds the password of that
-		// proxy account, even though it logs in with its own stored PID.
+		// console logs in with its own PID but has the proxy account's password
 		passwordPID := userPID
 		if proxyPID, ok := pidFromNEXToken(strings.TrimRight(token, "\x00")); ok {
 			if !bindConsolePID(userPID, proxyPID) {
@@ -118,10 +117,7 @@ func sendLoginResponse(client *nex.Client, response nex.RMCResponse) {
 	nexServer.Send(packet)
 }
 
-// A 3DS asks for further tickets on the connection it logged in with, and
-// can only decrypt them with the password used for its login ticket. That
-// password may belong to its proxy account rather than its login PID, so
-// remember it per connection.
+// remember the login password per connection for RequestTicket
 type loginCredentials struct {
 	pid      uint32
 	password string

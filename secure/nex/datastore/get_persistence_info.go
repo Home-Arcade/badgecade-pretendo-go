@@ -9,8 +9,7 @@ import (
 )
 
 func GetPersistenceInfo(err error, client *nex.Client, callID uint32, ownerID uint32, persistenceSlotID uint16) {
-	// A console asking for its own save gets the save of the Badgecade
-	// account it is bound to; the reply still names the console's PID.
+	// look up the save under the linked Badgecade account
 	lookupID := ownerID
 	if ownerID == client.PID() {
 		lookupID = database.CanonicalOwnerID(ownerID)
@@ -19,9 +18,7 @@ func GetPersistenceInfo(err error, client *nex.Client, callID uint32, ownerID ui
 
 	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
 
-	// Version 0 means PostMetaBinary created the record but the save upload
-	// never completed. Report it as missing so the game uploads a new save
-	// instead of trying to download an object that does not exist.
+	// version 0 = upload never finished, treat as no save
 	if dataID != 0 && database.GetVersionByDataID(dataID) != 0 {
 		pPersistenceInfo := datastore.NewDataStorePersistenceInfo()
 		pPersistenceInfo.OwnerID = ownerID

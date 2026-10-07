@@ -1,27 +1,23 @@
-# Badgecade Pretendo Go services
+# badgecade-pretendo-go
 
-Modified copies of Pretendo Network's Nintendo Badge Arcade NEX servers, as run by the Badgecade server.
-They're published here to meet the source-offer requirement of the GNU AGPL-3.0 (section 13).
+The auth and secure servers BadgeCade runs for Nintendo Badge Arcade. They're Pretendo's servers with some changes so they work with our proxy and save storage.
 
-| Directory | Upstream project | Upstream commit |
-|---|---|---|
-| `authentication/` | [PretendoNetwork/nintendo-badge-arcade-authentication](https://github.com/PretendoNetwork/nintendo-badge-arcade-authentication) | `54d3aee` |
-| `secure/` | [PretendoNetwork/nintendo-badge-arcade-secure](https://github.com/PretendoNetwork/nintendo-badge-arcade-secure) | `69fb9ea` |
+Pretendo's code is AGPL-3.0, so here's our modified version.
 
-See [MODIFICATIONS.md](MODIFICATIONS.md) for what was changed.
+- `authentication/` is from [nintendo-badge-arcade-authentication](https://github.com/PretendoNetwork/nintendo-badge-arcade-authentication) (commit `54d3aee`)
+- `secure/` is from [nintendo-badge-arcade-secure](https://github.com/PretendoNetwork/nintendo-badge-arcade-secure) (commit `69fb9ea`)
+
+What we changed is in [MODIFICATIONS.md](MODIFICATIONS.md).
 
 ## Building
-
-Each directory is its own Go module with a `Dockerfile`:
 
 ```bash
 docker build -t badgecade-auth ./authentication
 docker build -t badgecade-secure ./secure
 ```
 
-Configuration goes through environment variables; see each directory's `example.env`.
+Settings are env vars, check `example.env` in each folder.
 
 ## License
 
-GNU Affero General Public License v3.0. See [LICENSE](LICENSE) and the `LICENSE` file in each directory.
-The original copyright belongs to Pretendo Network and its contributors; Badgecade's changes are released under the same license.
+AGPL-3.0, same as the original. All credit for the original code goes to Pretendo Network.

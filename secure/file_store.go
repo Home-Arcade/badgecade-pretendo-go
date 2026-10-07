@@ -30,9 +30,7 @@ const (
 
 var fileStoreKeyPattern = regexp.MustCompile(`^[0-9]{11}-[0-9]{5}$`)
 
-// The Go Secure server uses the same signed HTTPS save store as the original
-// Badgecade NEX bundle, so existing saved objects remain usable after switching
-// NEX implementations.
+// same signed save store as the old python server so old saves still work
 func validateFileStoreConfig() error {
 	if _, err := fileStoreSecret(); err != nil {
 		return err
@@ -289,10 +287,8 @@ func serveFileStoreUpload(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// readFileStoreUpload parses the multipart POST a 3DS sends for a NEX save.
-// The console's file part may have no filename, which Go's ParseMultipartForm
-// would file under form values, so parts are read directly: the field named
-// "file", or any part with a filename, is the save; the rest are form values.
+// read the multipart parts by hand, the 3DS sometimes leaves out the filename
+// and ParseMultipartForm doesn't treat it as a file then
 func readFileStoreUpload(r *http.Request) (map[string][]string, []byte, error) {
 	mediaType, params, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {

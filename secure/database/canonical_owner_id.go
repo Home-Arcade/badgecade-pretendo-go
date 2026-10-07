@@ -9,13 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// CanonicalOwnerID returns the Badgecade account that owns a console's saves.
-//
-// A console logs in with a different PID depending on its Nimbus mode
-// (Nintendo NNID or Pretendo account), but Auth binds each login PID to the
-// player's Badgecade proxy account in pretendo.consolebindings. Storing saves
-// under that account lets one save follow the player across modes and
-// consoles. PIDs without a binding keep owning their own saves.
+// CanonicalOwnerID maps a console PID to its Badgecade account (from
+// consolebindings) so the save is the same in both Nimbus modes
 func CanonicalOwnerID(pid uint32) uint32 {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

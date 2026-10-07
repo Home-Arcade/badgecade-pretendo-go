@@ -16,10 +16,7 @@ import (
 
 const nexTokenMaxAge = 24 * time.Hour
 
-// pidFromNEXToken returns the proxy PID signed into a LoginEx token by the
-// HTTPS proxy's nex_token response. 3DS consoles log in with their locally
-// stored PID but use the password from that response, so this PID decides
-// which password the ticket must be encrypted with.
+// pidFromNEXToken gets the proxy PID out of the signed LoginEx token
 func pidFromNEXToken(token string) (uint32, bool) {
 	secret := os.Getenv("NEX_ACCOUNT_SECRET")
 	if len(secret) != 64 {
@@ -47,8 +44,7 @@ func pidFromNEXToken(token string) (uint32, bool) {
 	return binary.BigEndian.Uint32(body[0:4]), true
 }
 
-// bindConsolePID ties a console's login PID to the proxy account that first
-// used it, so one player cannot log in as another player's console PID.
+// bindConsolePID links a console PID to the first proxy account that uses it
 func bindConsolePID(consolePID uint32, proxyPID uint32) bool {
 	bindings := mongoDatabase.Collection("consolebindings")
 	filter := bson.D{{Key: "pid", Value: consolePID}}
