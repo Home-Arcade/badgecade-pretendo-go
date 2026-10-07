@@ -14,5 +14,6 @@ Changes we made to Pretendo's code (October 2026). A lot of files also show up a
 - Saves go to our own signed HTTPS file store instead of S3 (`file_store.go`, `nex/datastore/file_store.go` and the DataStore prepare/post/update handlers).
 - Saves are stored under the player's BadgeCade account instead of the console PID, so the save is the same in both Nimbus modes and on other consoles.
 - `GetPersistenceInfo` treats a save that never finished uploading as no save.
+- `nex/register_nex_protocols.go`: routes the Badge Arcade shop methods ourselves, because nex-protocols-go v1.0.25 never routes GetRivToken and the game got "not implemented" (006-0103) when buying plays. `GetRivToken` now returns a random token instead of an empty one.
 - `prudp/connect.go`: checks the CONNECT packet properly (lengths, ticket, PID) so bad packets get dropped instead of crashing the server.
 - Config changes in `init.go`, `main.go`, `example.env` and `Dockerfile`.
